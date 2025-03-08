@@ -6,7 +6,7 @@
 - 画像の画質(1 - 0.0)と形式(PNG or JPEG)を選択できる
 
 ## ショートカット.appの使用例
-!(Example of use)[https://github.com/Tetsuya81/PDFToImageConverter/blob/df05685240e464ed2404091d341550d787e36cfe/media/PDF%20Markup.jpeg]
+![Example of use](https://github.com/Tetsuya81/PDFToImageConverter/blob/df05685240e464ed2404091d341550d787e36cfe/media/PDF%20Markup.jpeg)
 
 ## 開発の経緯
 ChatGPT, GeminiなどにPDFファイルにハイライト、注釈を付けて英文のニュースや論文を読む際に部分的な日本語訳や意味を調べるサポートをさせたいが、ハイライトや注釈が省かれてしまうため画像形式に変換することで解決することにした。
