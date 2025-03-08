@@ -14,11 +14,11 @@ struct PDFShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: ConvertPDFToImageIntent(),
             phrases: [
-                "注釈付きPDFを画像に変換",
-                "\(.applicationName)でPDFを画像に変換",
-                "PDFの注釈を保持して画像化"
+                "Convert annotated PDF to image",
+                "Convert PDF to image with \(.applicationName)",
+                "Convert PDF to image while preserving annotations"
             ],
-            shortTitle: "PDF画像変換",
+            shortTitle: "PDF Image Conversion",
             systemImageName: "doc.on.doc"
         )
     }

@@ -2,13 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- 基本情報 -->
+    <!-- Basic Information -->
     <key>CFBundleIdentifier</key>
     <string>info.apry.PDFToImageConverter</string>
     <key>CFBundleName</key>
-    <string>PDF変換</string>
+    <string>PDF Conversion</string>
     <key>CFBundleDisplayName</key>
-    <string>PDF画像変換</string>
+    <string>PDF Image Conversion</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleShortVersionString</key>
@@ -18,17 +18,17 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     
-    <!-- iOS/iPadOS向け設定 -->
+    <!-- Settings for iOS/iPadOS -->
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>MinimumOSVersion</key>
     <string>16.0</string>
     
-    <!-- アプリケーションカテゴリー -->
+    <!-- Application Category -->
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
     
-    <!-- UIに関する設定 -->
+    <!-- UI Settings -->
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>
@@ -47,7 +47,7 @@
         </dict>
     </dict>
     
-    <!-- サポートする画面向き -->
+    <!-- Supported Interface Orientations -->
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
@@ -62,14 +62,14 @@
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
     
-    <!-- App Intents関連の設定 -->
+    <!-- Settings related to App Intents -->
     <key>NSAppIntentVocabulary</key>
     <array>
         <dict>
             <key>INIntentParameterName</key>
             <string>pdfFile</string>
             <key>INIntentParameterDisplayName</key>
-            <string>PDFファイル</string>
+            <string>PDF File</string>
             <key>INIntentParameterShortDisplayName</key>
             <string>PDF</string>
         </dict>
@@ -77,27 +77,27 @@
             <key>INIntentParameterName</key>
             <string>quality</string>
             <key>INIntentParameterDisplayName</key>
-            <string>画像品質</string>
+            <string>Image Quality</string>
             <key>INIntentParameterShortDisplayName</key>
-            <string>品質</string>
+            <string>Quality</string>
         </dict>
         <dict>
             <key>INIntentParameterName</key>
             <string>imageFormat</string>
             <key>INIntentParameterDisplayName</key>
-            <string>画像フォーマット</string>
+            <string>Image Format</string>
             <key>INIntentParameterShortDisplayName</key>
-            <string>形式</string>
+            <string>Format</string>
         </dict>
     </array>
     
-    <!-- プライバシー説明 -->
+    <!-- Privacy Descriptions -->
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>PDFを画像に変換して保存するにはフォトライブラリへのアクセス許可が必要です。</string>
+    <string>Access to the photo library is required to convert and save PDFs as images.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>変換した画像をフォトライブラリに保存します。</string>
+    <string>The converted image will be saved to the photo library.</string>
     
-    <!-- ファイルタイプ定義 -->
+    <!-- File Type Definitions -->
     <key>CFBundleDocumentTypes</key>
     <array>
         <dict>
@@ -112,7 +112,7 @@
         </dict>
     </array>
     
-    <!-- UTI定義 -->
+    <!-- UTI Definitions -->
     <key>UTImportedTypeDeclarations</key>
     <array>
         <dict>
@@ -132,14 +132,14 @@
         </dict>
     </array>
     
-    <!-- App Shortcuts関連設定 -->
+    <!-- App Shortcuts Related Settings -->
     <key>ApplicationShortcutItems</key>
     <array>
         <dict>
             <key>ApplicationShortcutShortTitle</key>
-            <string>PDF変換</string>
+            <string>PDF Conversion</string>
             <key>ApplicationShortcutTitle</key>
-            <string>PDFを画像に変換</string>
+            <string>Convert PDF to Image</string>
             <key>ApplicationShortcutType</key>
             <string>ConvertPDFToImage</string>
             <key>ApplicationShortcutIconSymbolName</key>

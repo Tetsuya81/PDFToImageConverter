@@ -2,15 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- アプリサンドボックス設定 -->
+    <!-- App Sandbox Settings -->
     <key>com.apple.security.app-sandbox</key>
     <true/>
     
-    <!-- ファイルアクセス権限 -->
+    <!-- File Access Permissions -->
     <key>com.apple.security.files.user-selected.read-write</key>
     <true/>
     
-    <!-- iCloudサポート（オプション） -->
+    <!-- iCloud Support (Optional) -->
     <key>com.apple.developer.icloud-container-identifiers</key>
     <array>
         <string>iCloud.com.example.PDFToImageConverter</string>
@@ -24,11 +24,11 @@
         <string>iCloud.com.example.PDFToImageConverter</string>
     </array>
     
-    <!-- App Intents機能のエンタイトルメント -->
+    <!-- App Intents Feature Entitlement -->
     <key>com.apple.developer.siri</key>
     <true/>
     
-    <!-- ショートカット連携 -->
+    <!-- Shortcuts Integration -->
     <key>com.apple.security.automation.apple-events</key>
     <true/>
 </dict>

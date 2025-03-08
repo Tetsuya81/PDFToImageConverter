@@ -10,17 +10,17 @@ import PDFKit
 import UniformTypeIdentifiers
 
 struct ConvertPDFToImageIntent: AppIntent {
-    static var title: LocalizedStringResource = "PDFを画像に変換"
-    static var description: IntentDescription = IntentDescription("注釈付きPDFを1枚の画像に変換します")
+    static var title: LocalizedStringResource = "Convert PDF to Image"
+    static var description: IntentDescription = IntentDescription("Converts an annotated PDF into a single image")
     
-    // 入力パラメータ: PDFファイル
-    @Parameter(title: "PDFファイル")
+    // Input parameter: PDF File
+    @Parameter(title: "PDF File")
     var pdfFile: IntentFile
     
-    @Parameter(title: "画像品質", default: 1.0)
+    @Parameter(title: "Image Quality", default: 1.0)
     var quality: Double
     
-    @Parameter(title: "画像フォーマット", default: ImageFormat.png)
+    @Parameter(title: "Image Format", default: ImageFormat.png)
     var imageFormat: ImageFormat
     
     enum ImageFormat: String, AppEnum {
@@ -28,7 +28,7 @@ struct ConvertPDFToImageIntent: AppIntent {
         case jpeg
         
         static var typeDisplayRepresentation: TypeDisplayRepresentation {
-            return TypeDisplayRepresentation(name: "画像フォーマット")
+            return TypeDisplayRepresentation(name: "Image Format")
         }
         
         static var caseDisplayRepresentations: [ImageFormat : DisplayRepresentation] = [
@@ -37,20 +37,21 @@ struct ConvertPDFToImageIntent: AppIntent {
         ]
     }
     
-    // 出力型の定義
+    // Definition of output type
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<IntentFile> {
-        // PDFデータを取得
-        guard let pdfData = pdfFile.data else {
+        // Retrieve PDF data
+        // Error Fix 1: Check for data existence
+        guard let pdfData = try? pdfFile.data else {
             throw Error.invalidPDFData
         }
         
-        // PDFを画像に変換
+        // Convert PDF to image
         guard let convertedImageData = try await convertPDFToImage(pdfData: pdfData) else {
             throw Error.conversionFailed
         }
         
-        // 画像フォーマットの処理
+        // Process image format
         let mimeType: String
         let finalImageData: Data
         
@@ -60,7 +61,7 @@ struct ConvertPDFToImageIntent: AppIntent {
             finalImageData = convertedImageData
         case .jpeg:
             mimeType = "image/jpeg"
-            // PNG画像をJPEGに変換
+            // Convert PNG image to JPEG
             guard let image = UIImage(data: convertedImageData),
                   let jpegData = image.jpegData(compressionQuality: CGFloat(quality)) else {
                 throw Error.conversionFailed
@@ -68,7 +69,7 @@ struct ConvertPDFToImageIntent: AppIntent {
             finalImageData = jpegData
         }
         
-        // 結果のファイルを作成
+        // Create result file
         let fileName = (pdfFile.filename ?? "document").replacingOccurrences(of: ".pdf", with: "") +
                        (imageFormat == .png ? ".png" : ".jpg")
         
@@ -77,31 +78,31 @@ struct ConvertPDFToImageIntent: AppIntent {
         return .result(value: resultFile)
     }
     
-    // エラー定義
+    // Error definitions
     enum Error: Swift.Error {
         case invalidPDFData
         case conversionFailed
     }
     
-    // PDFを画像に変換する関数
+    // Function to convert PDF to image
     private func convertPDFToImage(pdfData: Data) async throws -> Data? {
         return try await Task.detached(priority: .userInitiated) {
-            // PDFドキュメントを作成
+            // Create PDF document
             guard let pdfDocument = PDFDocument(data: pdfData) else {
-                return nil
+                return nil as Data? // Error Fix 2: Specify explicit type for nil
             }
             
-            // ページ数を取得
+            // Get page count
             let pageCount = pdfDocument.pageCount
-            guard pageCount > 0 else { return nil }
+            guard pageCount > 0 else { return nil as Data? }
             
-            // 全てのページを含む一つの画像を作成
+            // Create a single image that includes all pages
             var totalHeight: CGFloat = 0
             var maxWidth: CGFloat = 0
             var pageRects: [CGRect] = []
             var pageImages: [UIImage] = []
             
-            // まず各ページのサイズを計算
+            // First, calculate the size of each page
             for i in 0..<pageCount {
                 guard let page = pdfDocument.page(at: i) else { continue }
                 
@@ -112,10 +113,10 @@ struct ConvertPDFToImageIntent: AppIntent {
                 maxWidth = max(maxWidth, pageRect.width)
             }
             
-            // 全ページを含む画像の大きさを決定
+            // Determine the size of the image that includes all pages
             let totalSize = CGSize(width: maxWidth, height: totalHeight)
             
-            // UIGraphicsImageRendererでレンダリング
+            // Render using UIGraphicsImageRenderer
             let renderer = UIGraphicsImageRenderer(size: totalSize)
             
             let pngData = renderer.pngData { context in
@@ -123,12 +124,12 @@ struct ConvertPDFToImageIntent: AppIntent {
                 
                 var yOffset: CGFloat = 0
                 
-                // 各ページを描画
+                // Render each page
                 for i in 0..<pageCount {
                     guard let page = pdfDocument.page(at: i) else { continue }
                     let pageRect = pageRects[i]
                     
-                    // 現在のページの位置を計算
+                    // Calculate the position of the current page
                     let drawingRect = CGRect(
                         x: 0,
                         y: yOffset,
@@ -136,22 +137,28 @@ struct ConvertPDFToImageIntent: AppIntent {
                         height: pageRect.height
                     )
                     
-                    // コンテキストの状態を保存
+                    // Save context state
                     cgContext.saveGState()
                     
-                    // ページを描画
-                    cgContext.translateBy(x: 0, y: totalSize.height - yOffset - pageRect.height)
+                    // Move to appropriate position
+                    cgContext.translateBy(x: 0, y: yOffset)
+                    
+                    // Correct PDF coordinate system (fix inversion)
+                    cgContext.scaleBy(x: 1.0, y: -1.0)
+                    cgContext.translateBy(x: 0, y: -pageRect.height)
+                    
+                    // Draw the page
                     page.draw(with: .mediaBox, to: cgContext)
                     
-                    // コンテキストの状態を復元
+                    // Restore context state
                     cgContext.restoreGState()
                     
-                    // Y位置を更新
+                    // Update Y offset
                     yOffset += pageRect.height
                 }
             }
             
             return pngData
-        }
+        }.value
     }
 }
